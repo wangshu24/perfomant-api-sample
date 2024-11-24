@@ -1,7 +1,7 @@
 const PAGE_SIZE = 10
 const MAX_PAGE = 113
 
-function fetchPages(n) {
+function fetchPages(n, limit) {
     let results = []
     for (let i = n * PAGE_SIZE; i < MAX_PAGE ; i++) {
         if (results.length === 10) { break }
@@ -18,7 +18,7 @@ export class FetchAPI {
     remainder = []
     nextPage = 0     
     
-    pageBasedFetch(n) {
+    pageBasedFetch(n, limit) {
         let result = []
         if (this.remainder.length === 0) {
             let newFetch = fetchPages(this.nextPage)
@@ -47,7 +47,7 @@ export class FetchAPI {
         let nextPage = result[result.length-1]+1
         const destPage = result[0]+n
 
-        for (let i = Math.floor(nextPage/10); i < Math.floor(destPage/10)+1;i++) {
+        for (let i = Math.floor(nextPage/PAGE_SIZE); i < Math.floor(destPage/PAGE_SIZE)+1;i++) {
             let newFetch = fetchPages(i)
             this.remainder = this.remainder.concat(newFetch.results)
             this.nextPage = newFetch.nextPage 
@@ -77,7 +77,6 @@ export class FetchAPI {
 
 //Write test cases: Page-Based Fetching
 const pageBasedFetch = new FetchAPI();
-console.log(pageBasedFetch.pageBasedFetch(1))
 console.log(pageBasedFetch.pageBasedFetch(1))
 console.log(pageBasedFetch.pageBasedFetch(5))
 console.log(pageBasedFetch.pageBasedFetch(7))
